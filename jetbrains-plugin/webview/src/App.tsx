@@ -55,10 +55,10 @@ function DiagramPicker() {
 function InvalidNotice({ reason }: { reason: string }) {
   return (
     <div className="apollon-jetbrains-notice">
-      <h1>This file is not an Apollon diagram</h1>
+      <h1>This file is not a diagram Architect Studio can read</h1>
       <p>
-        Apollon could not read it: {reason}. Open it as text to repair the
-        contents, then reopen it as a diagram.
+        Architect Studio could not read it: {reason}. Open it as text to repair
+        the contents, then reopen it as a diagram.
       </p>
       <div className="apollon-jetbrains-choices">
         <button

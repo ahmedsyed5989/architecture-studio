@@ -100,7 +100,7 @@ class DiagramExporter {
             LocalFileSystem.getInstance().refreshAndFindFileByNioFile(target)
             if (!silent) {
                 ApplicationManager.getApplication().invokeLater {
-                    Messages.showInfoMessage("Exported $name", "Apollon")
+                    Messages.showInfoMessage("Exported $name", "Architect Studio")
                 }
             }
         } catch (e: Exception) {
@@ -113,7 +113,7 @@ class DiagramExporter {
         reason: String,
     ) {
         ApplicationManager.getApplication().invokeLater {
-            Messages.showErrorDialog("Apollon could not export $name: $reason", "Export Failed")
+            Messages.showErrorDialog("Architect Studio could not export $name: $reason", "Export Failed")
         }
     }
 }

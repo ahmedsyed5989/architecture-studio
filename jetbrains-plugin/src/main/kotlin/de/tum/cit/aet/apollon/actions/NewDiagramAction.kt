@@ -32,7 +32,7 @@ class NewDiagramAction : AnAction() {
         val popup =
             JBPopupFactory.getInstance()
                 .createPopupChooserBuilder(DIAGRAM_TYPES.entries.toList())
-                .setTitle("New Apollon Diagram")
+                .setTitle("New Diagram")
                 .setRenderer { _, value, _, _, _ -> javax.swing.JLabel(value.value) }
                 .setItemChosenCallback { entry -> createDiagram(project, entry.key) }
                 .createPopup()

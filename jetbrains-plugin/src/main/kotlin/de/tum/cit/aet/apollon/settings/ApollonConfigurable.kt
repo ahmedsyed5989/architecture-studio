@@ -9,11 +9,11 @@ import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 
-/** Project settings page: Settings/Preferences > Tools > Apollon. */
+/** Project settings page: Settings/Preferences > Tools > Architect Studio. */
 class ApollonConfigurable(private val project: Project) : Configurable {
     private var combo: JComboBox<AutoExport>? = null
 
-    override fun getDisplayName(): String = "Apollon"
+    override fun getDisplayName(): String = "Architect Studio"
 
     override fun createComponent(): JComponent {
         val box = JComboBox(AutoExport.entries.toTypedArray())

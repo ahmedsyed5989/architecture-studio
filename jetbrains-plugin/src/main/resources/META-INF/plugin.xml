@@ -2,14 +2,16 @@
     <!-- Reverse-DNS, immutable after the first Marketplace upload — see the
          plan's open question on Marketplace ID collisions before publishing. -->
     <id>de.tum.cit.aet.apollon</id>
-    <name>Apollon - TUM</name>
+    <name>Architect Studio</name>
     <vendor url="https://aet.cit.tum.de/">TUM Applied Education Technologies</vendor>
 
     <description><![CDATA[
-    Model UML diagrams directly in IntelliJ IDEA or WebStorm using the
-    <a href="https://github.com/ls1intum/Apollon">Apollon</a> editor. Diagrams are
-    stored as <code>.apollon</code> files so you can version them in Git alongside
-    your source.
+    Draw UML diagrams directly in IntelliJ IDEA or WebStorm with Architect Studio.
+    Right-click a PlantUML (<code>.puml</code>) file and choose
+    <b>Architect Studio &gt; Edit</b> to edit it visually — saving writes your
+    changes straight back to the PlantUML source. Native diagrams are versioned
+    in Git alongside your code. Built on the
+    <a href="https://github.com/ls1intum/Apollon">Apollon</a> UML editor.
     ]]></description>
 
     <!-- Platform-only: this is what makes one build install into both IntelliJ
@@ -32,29 +34,49 @@
         <fileEditorProvider implementation="de.tum.cit.aet.apollon.editor.ApollonFileEditorProvider" />
         <projectConfigurable
             id="apollon.settings"
-            displayName="Apollon"
+            displayName="Architect Studio"
             instance="de.tum.cit.aet.apollon.settings.ApollonConfigurable" />
         <toolWindow
-            id="Apollon"
+            id="Architect Studio"
             anchor="right"
             factoryClass="de.tum.cit.aet.apollon.toolwindow.DiagramToolWindowFactory" />
+        <notificationGroup id="Architect Studio" displayType="BALLOON" />
+        <editorTabTitleProvider implementation="de.tum.cit.aet.apollon.editor.ArchitectStudioTabTitleProvider" />
     </extensions>
 
     <actions>
-        <group id="Apollon.MainMenu" text="Apollon" popup="true">
+        <group id="Apollon.MainMenu" text="Architect Studio" popup="true">
             <add-to-group group-id="ToolsMenu" anchor="last" />
             <action
                 id="Apollon.NewDiagram"
                 class="de.tum.cit.aet.apollon.actions.NewDiagramAction"
-                text="New Apollon Diagram…"
-                description="Create a new .apollon diagram file" />
+                text="New Diagram…"
+                description="Create a new diagram" />
             <action
                 id="Apollon.ExportDiagram"
                 class="de.tum.cit.aet.apollon.actions.ExportDiagramAction"
-                text="Export Apollon Diagram…"
+                text="Export Diagram…"
                 description="Render the focused diagram to a sibling SVG or PNG file" />
         </group>
+        <group
+            id="ArchitectStudio.ProjectViewPopup"
+            class="de.tum.cit.aet.apollon.actions.ArchitectStudioGroup"
+            text="Architect Studio"
+            popup="true">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="EditSource" />
+            <action
+                id="ArchitectStudio.EditPuml"
+                class="de.tum.cit.aet.apollon.actions.EditPumlDiagramAction"
+                text="Edit"
+                description="Open this PlantUML diagram on the Architect Studio canvas" />
+        </group>
     </actions>
+
+    <projectListeners>
+        <listener
+            class="de.tum.cit.aet.apollon.editor.PumlSourceWatcher"
+            topic="com.intellij.openapi.vfs.newvfs.BulkFileListener" />
+    </projectListeners>
 
     <!-- App-level only: `FileDocumentManagerListener` has no project-scoped
          topic, so `ApollonSaveListener` itself walks every open project. -->

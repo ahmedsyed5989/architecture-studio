@@ -23,7 +23,7 @@ class ExportDiagramAction : AnAction() {
         val project = e.project ?: return
         val editor = FileEditorManager.getInstance(project).selectedEditor as? ApollonFileEditor
         if (editor == null) {
-            Messages.showErrorDialog(project, "No Apollon diagram is focused.", "Export Diagram")
+            Messages.showErrorDialog(project, "No Architect Studio diagram is focused.", "Export Diagram")
             return
         }
         val popup =

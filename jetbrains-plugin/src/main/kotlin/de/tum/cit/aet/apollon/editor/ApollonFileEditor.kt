@@ -69,7 +69,7 @@ class ApollonFileEditor(
             browser = null
             component =
                 JLabel(
-                    "This IDE was built without JCEF support, so the Apollon canvas cannot render.",
+                    "This IDE was built without JCEF support, so the Architect Studio canvas cannot render.",
                     SwingConstants.CENTER,
                 )
         } else {

@@ -16,6 +16,7 @@ import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
 import com.intellij.util.concurrency.AppExecutorUtil
+import de.tum.cit.aet.apollon.workspace.ArchitectStudioWorkspace
 import java.awt.BorderLayout
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -74,7 +75,13 @@ class DiagramToolWindowFactory : ToolWindowFactory, DumbAware {
         // freezing the EDT.
         fun refresh() {
             ReadAction.nonBlocking<List<VirtualFile>> {
+                val workspace = ArchitectStudioWorkspace.getInstance(project)
                 FilenameIndex.getAllFilesByExt(project, "apollon", GlobalSearchScope.projectScope(project))
+                    // A PUML-backed diagram's working `.apollon` file under `.architect-studio/`
+                    // is an internal artefact, never something the user opens directly (spec §6) —
+                    // its `.puml` source is what belongs in this list, and it isn't a `.apollon`
+                    // file at all, so this list simply omits PUML-backed diagrams entirely for now.
+                    .filterNot { workspace.isWorkingFile(it) }
                     .sortedBy { it.path }
             }
                 .finishOnUiThread(ModalityState.defaultModalityState()) { files ->

@@ -99,7 +99,7 @@ class DocumentSync(
         ApplicationManager.getApplication().assertIsDispatchThread()
         WriteCommandAction.runWriteCommandAction(
             project,
-            "Update Apollon Diagram",
+            "Update Diagram",
             null,
             { document.setText(text) },
         )
