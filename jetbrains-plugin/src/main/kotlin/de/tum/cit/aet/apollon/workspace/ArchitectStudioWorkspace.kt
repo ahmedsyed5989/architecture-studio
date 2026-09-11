@@ -9,10 +9,9 @@ import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import de.tum.cit.aet.apollon.document.parseModel
 import de.tum.cit.aet.apollon.document.writeDocumentText
-import de.tum.cit.aet.apollon.puml.ApollonModelMapper
-import de.tum.cit.aet.apollon.puml.PlantUmlExporter
-import de.tum.cit.aet.apollon.puml.PlantUmlImporter
-import de.tum.cit.aet.apollon.puml.PumlParseResult
+import de.tum.cit.aet.apollon.puml.DispatchedImport
+import de.tum.cit.aet.apollon.puml.PlantUmlDiagramExporter
+import de.tum.cit.aet.apollon.puml.PlantUmlDiagramImporter
 import de.tum.cit.aet.apollon.puml.PumlResidual
 import de.tum.cit.aet.apollon.puml.RoundTripValidator
 import kotlinx.serialization.json.JsonObject
@@ -195,9 +194,9 @@ class ArchitectStudioWorkspace(private val project: Project) {
             return OpenOutcome.Opened(workingVf, 0)
         }
 
-        val parsed = PlantUmlImporter.parse(text)
-        if (parsed is PumlParseResult.Rejected) return OpenOutcome.Rejected(parsed.reason)
-        parsed as PumlParseResult.Parsed
+        val parsed = PlantUmlDiagramImporter.parse(text)
+        if (parsed is DispatchedImport.Rejected) return OpenOutcome.Rejected(parsed.reason)
+        parsed as DispatchedImport.Parsed
 
         val id = existing?.id ?: UUID.randomUUID().toString()
         val workingFileName = Regex("\\.[^.]+$").replace(source.name, "") + ".apollon"
@@ -212,8 +211,9 @@ class ArchitectStudioWorkspace(private val project: Project) {
                 null
             }
 
-        val mapped = ApollonModelMapper.toApollonModel(parsed.diagram, previousModel, titleFor(source.name))
-        val residual = parsed.residual.copy(typeKeywords = mapped.typeKeywords, arrowTokens = mapped.arrowTokens)
+        val mapped = parsed.toApollonModel(previousModel, titleFor(source.name))
+        val residual =
+            parsed.residual.copy(typeKeywords = mapped.typeKeywords, arrowTokens = mapped.arrowTokens, elementAliases = mapped.elementAliases)
 
         try {
             writeAtomically(workingPath, writeDocumentText("", mapped.model))
@@ -267,9 +267,9 @@ class ArchitectStudioWorkspace(private val project: Project) {
                 PumlResidual.empty()
             }
 
-        val export = ApollonModelMapper.toPumlDiagram(model, residual)
-        val prunedResidual = residual.copy(typeKeywords = export.typeKeywords, arrowTokens = export.arrowTokens)
-        val candidate = PlantUmlExporter.render(export.diagram, prunedResidual)
+        val dispatched = PlantUmlDiagramExporter.render(model, residual)
+        val candidate = dispatched.text
+        val prunedResidual = dispatched.residual
 
         RoundTripValidator.validate(candidate, model)?.let { reason ->
             return SyncOutcome.Failed("Architect Studio could not safely rewrite the PlantUML source: $reason")

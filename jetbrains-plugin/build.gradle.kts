@@ -36,6 +36,7 @@ dependencies {
         intellijIdeaCommunity(libs.versions.intellijIdeaCommunity)
     }
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.plantuml.mit)
     testImplementation(libs.junit)
 }
 

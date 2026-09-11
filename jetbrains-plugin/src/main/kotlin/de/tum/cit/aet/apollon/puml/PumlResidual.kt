@@ -32,6 +32,12 @@ data class PumlResidual(
     val typeKeywords: Map<String, String> = emptyMap(),
     /** edgeId -> the exact source arrow token ("-->", "--->", "<|..", ...). */
     val arrowTokens: Map<String, String> = emptyMap(),
+    /** nodeId -> the source-level `as <alias>` identifier, for families whose display name is a
+     *  quoted phrase rather than a bare identifier (UseCase/Component/Deployment — plan §9's new
+     *  families; unused/always empty for Class, which has no alias concept to preserve). A node
+     *  reusing the same alias across saves is what keeps the generated PlantUML's diff small
+     *  instead of renumbering aliases every export (plan § canonical-vs-generated-source). */
+    val elementAliases: Map<String, String> = emptyMap(),
 ) {
     fun toJson(): String {
         val obj =
@@ -46,6 +52,7 @@ data class PumlResidual(
                 put("unsupported", stringArray(unsupported))
                 put("typeKeywords", stringMap(typeKeywords))
                 put("arrowTokens", stringMap(arrowTokens))
+                put("elementAliases", stringMap(elementAliases))
             }
         return Json { prettyPrint = true; prettyPrintIndent = "  " }.encodeToString(JsonObject.serializer(), obj) + "\n"
     }
@@ -72,6 +79,7 @@ data class PumlResidual(
                 unsupported = root.stringArray("unsupported"),
                 typeKeywords = root.stringMap("typeKeywords"),
                 arrowTokens = root.stringMap("arrowTokens"),
+                elementAliases = root.stringMap("elementAliases"),
             )
         }
 

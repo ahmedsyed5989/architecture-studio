@@ -30,10 +30,15 @@ junit = "4.13.2"
 # JetBrains code, not a contract we can compile against. Kotlin plugin
 # classloaders are isolated per-plugin, so bundling our own risks no conflict.
 kotlinxSerializationJson = "1.11.0"
+# The MIT-licensed artifact (GPL is the default `net.sourceforge.plantuml:plantuml`
+# coordinate — wrong for bundling into a plugin under this repo's license). Verified
+# on Maven Central at pin time (2026-09); re-check before bumping.
+plantumlMit = "1.2026.8"
 
 [libraries]
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+plantuml-mit = { module = "net.sourceforge.plantuml:plantuml-mit", version.ref = "plantumlMit" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

@@ -16,6 +16,8 @@ data class MappedModel(
     val model: JsonObject,
     val typeKeywords: Map<String, String>,
     val arrowTokens: Map<String, String>,
+    /** nodeId -> source `as <alias>` (plan §9's new families only — see [PumlResidual.elementAliases]). */
+    val elementAliases: Map<String, String> = emptyMap(),
 )
 
 data class PumlExport(

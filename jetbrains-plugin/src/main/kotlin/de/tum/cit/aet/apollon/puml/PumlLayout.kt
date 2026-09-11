@@ -31,6 +31,13 @@ object PumlLayout {
         return Size(DEFAULT_WIDTH, height)
     }
 
+    /** Same header+rows sizing as [sizeOf], for families with no interface/enum stereotype header
+     *  variant (Object/Component/Deployment/UseCase — plan §9's new families). */
+    fun sizeOfRows(
+        rowCount: Int,
+        header: Int = HEADER_HEIGHT,
+    ): Size = Size(DEFAULT_WIDTH, ceilToGrid(header + ROW_HEIGHT * rowCount))
+
     private fun ceilToGrid(value: Int): Int = ceil(value / GRID_SNAP.toDouble()).toInt() * GRID_SNAP
 
     fun gridPositions(

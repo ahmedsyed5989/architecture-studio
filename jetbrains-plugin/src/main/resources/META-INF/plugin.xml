@@ -32,6 +32,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileEditorProvider implementation="de.tum.cit.aet.apollon.editor.ApollonFileEditorProvider" />
+        <fileEditorProvider implementation="de.tum.cit.aet.apollon.editor.PlantUmlPreviewFileEditorProvider" />
         <projectConfigurable
             id="apollon.settings"
             displayName="Architect Studio"
