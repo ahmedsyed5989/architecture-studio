@@ -215,6 +215,9 @@ class ApollonFileEditor(
     /** Flush a pending canvas edit before a save persists the document. */
     fun flushForSave() = sync?.flushForSave()
 
+    /** Push the current auto-export setting to this canvas, e.g. after it changes in Settings. */
+    fun applyAutoExportSetting() = postToWebview(HostMessage.AutoExportChanged(autoExportSetting()))
+
     /** Render the diagram in this editor's canvas, for the export action/auto-export. */
     fun export(
         format: de.tum.cit.aet.apollon.protocol.ExportFormat,
@@ -231,7 +234,8 @@ class ApollonFileEditor(
 
     override fun getName(): String = "Diagram"
 
-    override fun setState(state: FileEditorState) {}
+    // Required FileEditor override; this editor has no state to restore beyond the file itself.
+    override fun setState(state: FileEditorState) = Unit
 
     override fun isModified(): Boolean = FileDocumentManager.getInstance().isFileModified(file)
 
